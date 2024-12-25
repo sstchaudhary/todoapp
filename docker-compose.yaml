@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  server:
+    build: ./server
+    container_name: server_c
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/app
+      - ./server/node_modules:/app/node_modules
+    env_file:
+      - ./server/.env
+  
+  client:
+    build: ./client
+    container_name: client_c
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+    volumes:
+      - ./client:/app
+      - ./client/node_modules:/app/node_modules
+    command: ["npm", "run", "start"]
